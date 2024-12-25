@@ -1,0 +1,137 @@
+{
+    "info": {
+      "name": "Laravel API with Sanctum",
+      "_postman_id": "12345-abcde-67890-fghij",
+      "description": "Postman collection for Laravel API with Sanctum authentication and roles",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Register Customer",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"name\": \"Customer User\",\n    \"email\": \"customer@example.com\",\n    \"password\": \"password123\"\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/api/register",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "api",
+              "register"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Login Customer",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"email\": \"customer@example.com\",\n    \"password\": \"password123\"\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/api/login",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "api",
+              "login"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Register Admin",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{admin_token}}"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"name\": \"Admin User\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"adminpassword\"\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/api/register-admin",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "api",
+              "register-admin"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Add Product (Admin Only)",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Authorization",
+              "value": "Bearer {{admin_token}}"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"name\": \"Product Name\",\n    \"description\": \"Product description\",\n    \"price\": 100.00,\n    \"quantity\": 10\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/api/products",
+            "host": [
+              "{{base_url}}"
+            ],
+            "path": [
+              "api",
+              "products"
+            ]
+          }
+        },
+        "response": []
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:8005"
+      },
+      {
+        "key": "admin_token",
+        "value": ""
+      }
+    ]
+  }
+  
