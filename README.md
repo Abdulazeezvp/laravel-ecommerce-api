@@ -64,7 +64,8 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
    ```bash
    php artisan db:seed
    ```
-
+    will seed default admin user(username: admin@email.com,password:123456)
+    
 8. **Install Laravel Sanctum for API authentication**:
    Run the Sanctum migration:
    ```bash
