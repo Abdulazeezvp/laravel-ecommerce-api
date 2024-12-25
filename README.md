@@ -113,6 +113,12 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
   - `POST /products/list`
   - **Request Headers**:
     - `Accept: application/json`
+### Product Show
+
+- **Show Product details**:
+  - `POST /product/{id}`
+  - **Request Headers**:
+    - `Accept: application/json`
 
 ### Admin Routes (Authenticated Admin Only)
 
@@ -135,41 +141,403 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
   - **Request Headers**:
     - `Accept: application/json`
 
-- **Manage Products**:
-  - `GET, POST, PUT, DELETE /products`
-  - **Request Headers**:
-    - `Accept: application/json`
+## Products
 
-### Orders (Authenticated Users Only)
+### List Products
 
-- **List Orders**:
-  - `GET /orders`
-  - **Request Headers**:
-    - `Accept: application/json`
+- **URL**: `/products/list`
+- **Method**: `POST`
+- **Headers**:
+  - `Accept: application/json`
 
-- **Create Order**:
-  - `POST /orders`
-  - **Request Headers**:
-    - `Accept: application/json`
-  - **Request Body**:
-    ```json
+- **Response** (Success):
+  ```json
+  [
     {
+      "id": 1,
+      "name": "Product A",
+      "price": 50.00,
+      "description": "Sample product A description",
+      "created_at": "2023-12-24T10:00:00.000000Z",
+      "updated_at": "2023-12-24T10:00:00.000000Z"
+    },
+    {
+      "id": 2,
+      "name": "Product B",
+      "price": 75.00,
+      "description": "Sample product B description",
+      "created_at": "2023-12-24T10:00:00.000000Z",
+      "updated_at": "2023-12-24T10:00:00.000000Z"
+    }
+  ]
+  ```
+
+---
+
+### Create Product
+
+- **URL**: `/products`
+- **Method**: `POST`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated admins)
+
+- **Request Body**:
+  ```json
+  {
+    "name": "New Product",
+    "price": 100.00,
+    "description": "A brief description of the new product"
+  }
+  ```
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 3,
+    "name": "New Product",
+    "price": 100.00,
+    "description": "A brief description of the new product",
+    "created_at": "2023-12-24T10:15:00.000000Z",
+    "updated_at": "2023-12-24T10:15:00.000000Z"
+  }
+  ```
+
+- **Response** (Unauthorized):
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### Show Product
+
+- **URL**: `/products/{id}`
+- **Method**: `GET`
+- **Headers**:
+  - `Accept: application/json`
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 1,
+    "name": "Product A",
+    "price": 50.00,
+    "description": "Sample product A description",
+    "created_at": "2023-12-24T10:00:00.000000Z",
+    "updated_at": "2023-12-24T10:00:00.000000Z"
+  }
+  ```
+
+- **Response** (Product not found):
+  ```json
+  {
+    "message": "Product not found"
+  }
+  ```
+
+---
+
+### Update Product
+
+- **URL**: `/products/{id}`
+- **Method**: `PUT`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated admins)
+
+- **Request Body**:
+  ```json
+  {
+    "name": "Updated Product",
+    "price": 120.00,
+    "description": "Updated description"
+  }
+  ```
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 1,
+    "name": "Updated Product",
+    "price": 120.00,
+    "description": "Updated description",
+    "created_at": "2023-12-24T10:00:00.000000Z",
+    "updated_at": "2023-12-24T10:30:00.000000Z"
+  }
+  ```
+
+---
+
+### Delete Product
+
+- **URL**: `/products/{id}`
+- **Method**: `DELETE`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated admins)
+
+- **Response** (Success):
+  ```json
+  {
+    "message": "Product deleted"
+  }
+  ```
+
+- **Response** (Product not found):
+  ```json
+  {
+    "message": "Product not found"
+  }
+  ```
+
+
+
+## Orders
+
+### List Orders
+
+- **URL**: `/orders`
+- **Method**: `GET`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated users)
+
+- **Response** (Admin):
+  ```json
+  [
+    {
+      "id": 1,
+      "user_id": 2,
+      "total_price": 150.00,
+      "status": "pending",
       "items": [
-        { "product_id": 1, "quantity": 2 },
-        { "product_id": 2, "quantity": 1 }
+        {
+          "id": 1,
+          "order_id": 1,
+          "product_id": 1,
+          "quantity": 2,
+          "price": 50.00,
+          "product": {
+            "id": 1,
+            "name": "Product A",
+            "price": 50.00
+          }
+        }
       ]
     }
-    ```
+  ]
+  ```
 
-- **Update Order**:
-  - `PUT /orders/{id}`
-  - **Request Headers**:
-    - `Accept: application/json`
+- **Response** (Non-admin, only their own orders):
+  ```json
+  [
+    {
+      "id": 1,
+      "user_id": 2,
+      "total_price": 150.00,
+      "status": "pending",
+      "items": [
+        {
+          "id": 1,
+          "order_id": 1,
+          "product_id": 1,
+          "quantity": 2,
+          "price": 50.00,
+          "product": {
+            "id": 1,
+            "name": "Product A",
+            "price": 50.00
+          }
+        }
+      ]
+    }
+  ]
+  ```
 
-- **Delete Order**:
-  - `DELETE /orders/{id}`
-  - **Request Headers**:
-    - `Accept: application/json`
+---
+
+### Show Order
+
+- **URL**: `/orders/{id}`
+- **Method**: `GET`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated users)
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 1,
+    "user_id": 2,
+    "total_price": 150.00,
+    "status": "pending",
+    "items": [
+      {
+        "id": 1,
+        "order_id": 1,
+        "product_id": 1,
+        "quantity": 2,
+        "price": 50.00,
+        "product": {
+          "id": 1,
+          "name": "Product A",
+          "price": 50.00
+        }
+      }
+    ]
+  }
+  ```
+
+- **Response** (Order not found):
+  ```json
+  {
+    "message": "Order not found"
+  }
+  ```
+
+- **Response** (Unauthorized to view another user's order):
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### Create Order
+
+- **URL**: `/orders`
+- **Method**: `POST`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated users)
+
+- **Request Body**:
+  ```json
+  {
+    "items": [
+      { "product_id": 1, "quantity": 2 },
+      { "product_id": 2, "quantity": 1 }
+    ]
+  }
+  ```
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 1,
+    "user_id": 2,
+    "total_price": 150.00,
+    "items": [
+      {
+        "id": 1,
+        "order_id": 1,
+        "product_id": 1,
+        "quantity": 2,
+        "price": 50.00,
+        "product": {
+          "id": 1,
+          "name": "Product A",
+          "price": 50.00
+        }
+      },
+      {
+        "id": 2,
+        "order_id": 1,
+        "product_id": 2,
+        "quantity": 1,
+        "price": 50.00,
+        "product": {
+          "id": 2,
+          "name": "Product B",
+          "price": 50.00
+        }
+      }
+    ]
+  }
+  ```
+
+- **Response** (Unauthorized):
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### Update Order
+
+- **URL**: `/orders/{id}`
+- **Method**: `PUT`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated users)
+
+- **Request Body** (Admin):
+  ```json
+  {
+    "status": "shipped"
+  }
+  ```
+
+- **Response** (Success):
+  ```json
+  {
+    "id": 1,
+    "user_id": 2,
+    "total_price": 150.00,
+    "status": "shipped"
+  }
+  ```
+
+- **Response** (Unauthorized):
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **Response** (Order not found):
+  ```json
+  {
+    "message": "Order not found"
+  }
+  ```
+
+---
+
+### Delete Order
+
+- **URL**: `/orders/{id}`
+- **Method**: `DELETE`
+- **Headers**:
+  - `Accept: application/json`
+  - `Authorization: Bearer {token}` (for authenticated users)
+
+- **Response** (Success):
+  ```json
+  {
+    "message": "Order deleted"
+  }
+  ```
+
+- **Response** (Unauthorized):
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **Response** (Order not found):
+  ```json
+  {
+    "message": "Order not found"
+  }
+  ```
 
 ## Middleware
 
@@ -194,12 +562,6 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
 3. **Authentication Token**:
    After logging in or registering, you will receive a token in the response. Use this token to authenticate your requests by setting it in the `Authorization` header as `Bearer {token}`.
 
-## Running Tests
-
-Run the application's test suite using PHPUnit:
-```bash
-php artisan test
-```
 
 ## Additional Notes
 

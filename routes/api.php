@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('products/list', [ProductController::class, 'index']);
+Route::post('product/{id}', [ProductController::class, 'show']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('orders', OrderController::class);
