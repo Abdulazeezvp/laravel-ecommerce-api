@@ -13,7 +13,7 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
 
 ### Prerequisites
 
-- PHP >= 8.0
+- PHP >= 8.2
 - Composer
 - MySQL or another supported database
 - Laravel installed (`composer global require laravel/installer`)
@@ -546,21 +546,6 @@ This is a simple e-commerce REST API built with Laravel. The API includes user a
 
 - **Admin Middleware**:
   Admin routes are protected using custom middleware (`AdminMiddleware`). Only users with the role of admin can manage products and users.
-
-## Testing the API with Postman
-
-1. **Import the Postman collection**:
-   Export your Postman collection as a JSON file and include it in the repository (or provide a link to the collection).
-
-   Example: [Postman Collection Download Link](#)
-
-2. **Use Postman**:
-   After importing the collection, ensure that each request includes the appropriate **headers**:
-   - `Accept: application/json`
-   - **Authorization**: Bearer token (For authenticated routes)
-
-3. **Authentication Token**:
-   After logging in or registering, you will receive a token in the response. Use this token to authenticate your requests by setting it in the `Authorization` header as `Bearer {token}`.
 
 
 ## Additional Notes
